@@ -120,7 +120,7 @@ If :default, don't produce an error but return the provided value."
   (let ((@--super (+ 1 @--super)))
     (apply (@ object property :super @--super) object args)))
 
-(cl-eval-when (compile load)
+(cl-eval-when (compile load eval)
   (defun @--walk (sexp skip replace &optional head)
     "Replace all symbols by calling REPLACE on them."
     (cl-macrolet ((wrap (exp) `(let ((v ,exp)) (if head (list v) v))))
@@ -133,7 +133,7 @@ If :default, don't produce an error but return the provided value."
                  (cl-loop for element in (cdr sexp)
                           collect (@--walk element skip replace nil)))))))))
 
-(cl-eval-when (compile load)
+(cl-eval-when (compile load eval)
   (defun @--replace (symbol head)
     "Replace @: and @^: symbols with their lookup/funcall expansions."
     (let ((name (symbol-name symbol)))
